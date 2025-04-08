@@ -165,4 +165,121 @@ nano /etc/selinux/config
 
 ---
 
+## Part 6: Bash Script and Process Management
+
+---
+
+###  Script File:
+The script is saved as [`part6.sh`](./part6.sh)
+
+---
+
+### Commands and Explanation:
+
+```bash
+# Create the shell script file
+nano part6.sh
+
+# Make the script executable
+chmod +x part6.sh
+
+# Run the script in the background
+./part6.sh &
+
+# Show the PID of the background script
+echo $!
+
+# OR find the process by name
+ps aux | grep part6.sh
+
+# Kill the process using its PID 
+kill 1234
+```
+
+---
+
+## Part 7: Yum Repository 
+
+---
+
+###  Commands and Explanation:
+
+```bash
+# Install tmux
+yum install tmux
+
+# Install Apache web server (httpd)
+yum install httpd
+systemctl start httpd
+systemctl enable httpd
+systemctl status httpd
+
+# Install MariaDB
+yum install -y mariadb-server
+systemctl start mariadb
+systemctl enable mariadb
+
+# Secure MySQL installation
+mysql_secure_installation
+
+# Create directory to hold Zabbix repo files
+mkdir -p /var/www/html/zabbix
+cd /var/www/html/zabbix
+
+# Install wget to download files
+yum install -y wget
+
+# Download all Zabbix packages
+wget -r -np -nH --cut-dirs=4 -R "index.html*" \
+https://repo.zabbix.com/zabbix/4.4/rhel/7/x86_64/
+
+# Install and run createrepo to generate metadata
+yum install -y createrepo
+createrepo /var/www/html/zabbix
+
+# Make sure the web server is running to serve the repo
+systemctl status httpd
+
+nano /etc/yum.repos.d/zabbix-local.repo
+
+The Yum repo config is saved as [`part7.txt`](./part7.txt)
+
+# Clean all cached metadata
+yum clean all
+
+# Check current repositories
+yum repolist
+
+# Disable all repos
+yum-config-manager --disable \*
+
+# Enable only your local Zabbix repo
+yum-config-manager --enable zabbix-local
+
+# Confirm enabled repos
+yum repolist
+
+yum install -y zabbix-server-mysql zabbix-agent zabbix-web-mysql \
+zabbix-apache-conf zabbix-get zabbix-sender
+
+# Verify installation
+rpm -qa | grep zabbix
+
+# Start, enable and check status of services
+systemctl start zabbix-server
+systemctl enable zabbix-server
+systemctl status zabbix-server
+
+systemctl start zabbix-agent
+systemctl enable zabbix-agent
+systemctl status zabbix-agent
+
+open this URL in a browser (http://localhost/zabbix)
+```
+
+---
+
+
+
+
 
