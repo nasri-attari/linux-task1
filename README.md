@@ -49,6 +49,8 @@ df -h /mnt/data
 
 ## Part 2: Users, Groups, and Permissions
 
+---
+
 ### Commands and Explanation:
 
 ```bash
