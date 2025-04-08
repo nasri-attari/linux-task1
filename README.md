@@ -279,6 +279,142 @@ open this URL in a browser (http://localhost/zabbix)
 
 ---
 
+## Part 8: Network Management 
+
+---
+
+### Commands and Explanation:
+
+```bash
+# Open port 443 (HTTPS) permanently
+firewall-cmd --zone=public --add-port=443/tcp --permanent
+
+# Open port 80 (HTTP) permanently
+firewall-cmd --zone=public --add-port=80/tcp --permanent
+
+# Reload firewall to apply changes
+firewall-cmd --reload
+
+# Verify that ports are opened
+firewall-cmd --list-ports
+
+# Block SSH (port 22) from IP address 192.168.1.100
+firewall-cmd --zone=public --add-rich-rule='rule family="ipv4" source address="192.168.1.100" port port="22" protocol="tcp" reject' --permanent
+
+# Reload firewall to apply the blocking rule
+firewall-cmd --reload
+
+# List all rules to verify
+firewall-cmd --list-all
+```
+
+---
+
+## Part 9: Cronjob
+
+---
+
+### Script File:
+The logging script is saved in this repo as [`part9.sh`](./part9.sh)
+
+---
+
+### Commands and Explanation:
+
+```bash
+# Open the script 
+nano /usr/local/bin/log-logged-users.sh
+
+# (Paste the script or use part9.sh contents)
+
+# Make the script executable
+chmod +x /usr/local/bin/log-logged-users.sh
+
+# Edit the crontab to schedule the task
+crontab -e
+# Add this line:
+# 30 1 * * * /usr/local/bin/log-logged-users.sh
+
+# Verify that the cronjob was added
+crontab -l
+```
+
+----
+
+## Part 10: MariaDB 
+
+---
+
+### Step 1: Install MariaDB from Local Repo
+
+```bash
+# Install MariaDB using only the local Zabbix repo
+yum --disablerepo=\* --enablerepo=zabbix-local install mariadb-server -y
+
+# Start and enable the service
+systemctl start mariadb
+systemctl enable mariadb
+
+# Open port 3306 permanently for MariaDB
+firewall-cmd --permanent --add-port=3306/tcp
+
+# Reload firewall rules to apply
+firewall-cmd --reload
+
+# Confirm that port 3306 is open
+firewall-cmd --list-ports
+
+# Login to MariaDB as root
+mysql -u root -p
+
+-- Create the student database
+CREATE DATABASE studentdb;
+
+-- Create a new user with password
+CREATE USER 'studentuser'@'localhost' IDENTIFIED BY 'Student@123';
+
+-- Grant permissions to the new user
+GRANT ALL PRIVILEGES ON studentdb.* TO 'studentuser'@'localhost';
+FLUSH PRIVILEGES;
+
+-- Use the new database
+USE studentdb;
+
+-- Create the students table
+CREATE TABLE students (
+    student_number VARCHAR(10) PRIMARY KEY,
+    firstname VARCHAR(50),
+    lastname VARCHAR(50),
+    program VARCHAR(50),
+    graduation_year INT
+);
+
+-- Insert 10 student records
+INSERT INTO students VALUES
+('110-001', 'Allen', 'Brown', 'mechanical', 2017),
+('110-002', 'David', 'Brown', 'mechanical', 2017),
+('110-003', 'Mary', 'Green', 'electrical', 2018),
+('110-004', 'Dennis', 'Green', 'electrical', 2018),
+('110-005', 'Joseph', 'Black', 'electrical', 2018),
+('110-006', 'Dennis', 'Black', 'computer science', 2020),
+('110-007', 'Ritchie', 'Salt', 'computer science', 2020),
+('110-008', 'Robert', 'Salt', 'computer science', 2020),
+('110-009', 'David', 'Suzuki', 'computer science', 2020),
+('110-010', 'Mary', 'Chen', 'computer science', 2020);
+
+exit;
+
+# Login as the new user
+mysql -u studentuser -p
+
+USE studentdb;
+SELECT * FROM students;
+```
+
+---
+
+
+
 
 
 
