@@ -36,7 +36,7 @@ mount /dev/vg-data/lv-data /mnt/data
 df -h /mnt/data
 
 # Edit /etc/fstab to make the mount permanent
-nano /etc/fstab
+vi /etc/fstab
 # Add this line to the end:
 # /dev/vg-data/lv-data /mnt/data ext4 defaults 0 0
 
@@ -60,7 +60,7 @@ df -h /mnt/data
 useradd -u 601 -s /sbin/nologin user1
 
 # Set password for user1
-passwd --stdin user1  # (type: redhat)
+passwd --stdin user1
 
 # Create a new group
 groupadd TrainingGroup
@@ -79,14 +79,9 @@ echo "redhat" | passwd --stdin user2
 useradd user3
 echo "redhat" | passwd --stdin user3
 
-# Add both user2 and user3 to 'wheel' group (admin group)
+# Add both user2 and user3 to wheel group
 usermod -aG wheel user2
 usermod -aG wheel user3
-
-# Give user3 full sudo/root permissions
-visudo
-# Add this line at the end:
-# user3 ALL=(ALL) ALL
 ```
 
 ---
@@ -158,8 +153,8 @@ sestatus
 setenforce 1
 
 # Edit SELinux config file to make enforcing mode permanent
-nano /etc/selinux/config
-# Inside the file, set:
+vi /etc/selinux/config
+# Inside the file
 # SELINUX=enforcing
 ```
 
@@ -178,7 +173,7 @@ The script is saved as [`part6.sh`](./part6.sh)
 
 ```bash
 # Create the shell script file
-nano part6.sh
+vi part6.sh
 
 # Make the script executable
 chmod +x part6.sh
@@ -240,7 +235,7 @@ createrepo /var/www/html/zabbix
 # Make sure the web server is running to serve the repo
 systemctl status httpd
 
-nano /etc/yum.repos.d/zabbix-local.repo
+vi /etc/yum.repos.d/zabbix-local.repo
 
 The Yum repo config is saved as [`part7.txt`](./part7.txt)
 
@@ -323,9 +318,9 @@ The logging script is saved in this repo as [`part9.sh`](./part9.sh)
 
 ```bash
 # Open the script 
-nano /usr/local/bin/log-logged-users.sh
+vi /usr/local/bin/log-logged-users.sh
 
-# (Paste the script or use part9.sh contents)
+# (part9.sh contents)
 
 # Make the script executable
 chmod +x /usr/local/bin/log-logged-users.sh
