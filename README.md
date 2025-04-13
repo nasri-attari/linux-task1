@@ -431,8 +431,6 @@ INSERT INTO students VALUES
 ('110-008', 'Robert', 'Salt', 'computer science', 2020),
 ('110-009', 'David', 'Suzuki', 'computer science', 2020),
 ('110-010', 'Mary', 'Chen', 'computer science', 2020);
-
-exit;
 ```
 
 ---
