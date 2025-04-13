@@ -124,17 +124,20 @@ ssh-copy-id nasri@10.0.2.15
 # Copy the original fstab file to /var/tmp/admin
 cp /etc/fstab /var/tmp/admin
 
-# Verify that the file exists
-ls -l /var/tmp/admin
+# Set ownership to root 
+chown root:root /var/tmp/admin
 
-# Change ownership to user1
-chown user1:user1 /var/tmp/admin
+# Set default permissions 
+chmod 600 /var/tmp/admin
 
-# Verify the owner is now user1
-ls -l /var/tmp/admin
+# Give user1 full permissions (read/write)
+setfacl -m u:user1:rw /var/tmp/admin
 
-# Set permissions so only user1 can read/write/execute
-chmod 700 /var/tmp/admin
+# Deny all permissions for user2
+setfacl -m u:user2:0 /var/tmp/admin
+ 
+ # View the ACL 
+getfacl /var/tmp/admin
 ```
 
 ---
@@ -180,9 +183,6 @@ chmod +x part6.sh
 
 # Run the script in the background
 ./part6.sh &
-
-# Show the PID of the background script
-echo $!
 
 # OR find the process by name
 ps aux | grep part6.sh
@@ -274,7 +274,7 @@ open this URL in a browser (http://localhost/zabbix)
 
 ---
 
-## Part 8: Network Management 
+## Part 8: Network Management (Using firewall-cmd)
 
 ---
 
@@ -301,6 +301,31 @@ firewall-cmd --reload
 
 # List all rules to verify
 firewall-cmd --list-all
+```
+
+---
+
+## Part 8: Network Management (Using Ip Tables)
+
+---
+
+### Commands and Explanation:
+
+```bash
+# Open port 443 (HTTPS) permanently
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+
+# Open port 80 (HTTP) permanently
+iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+
+# Block SSH (port 22) from IP address 192.168.1.100
+iptables -A INPUT -p tcp --dport 22 -s 192.168.1.100 -j REJECT
+
+# Save ip tables
+service iptables save
+
+# List ip tables
+iptables -L -n
 ```
 
 ---
@@ -351,13 +376,10 @@ systemctl start mariadb
 systemctl enable mariadb
 
 # Open port 3306 permanently for MariaDB
-firewall-cmd --permanent --add-port=3306/tcp
+iptables -A INPUT -p tcp --dport 3306 -j ACCEPT
 
-# Reload firewall rules to apply
-firewall-cmd --reload
-
-# Confirm that port 3306 is open
-firewall-cmd --list-ports
+# Save the iptables 
+service iptables save
 
 # Login to MariaDB as root
 mysql -u root -p
