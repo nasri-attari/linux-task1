@@ -8,7 +8,7 @@
 # List available disks to find the second one
 lsblk
 
-# Initialize /dev/sdb as a physical volume
+# initialize /dev/sdb as a physical volume
 pvcreate /dev/sdb
 
 # Verify physical volume
@@ -137,7 +137,7 @@ chown root:root /var/tmp/admin
 # Set default permissions 
 chmod 600 /var/tmp/admin
 
-# Give user1 full permissions (read/write)
+# Give user1 full permissions
 setfacl -m u:user1:rw /var/tmp/admin
 
 # Deny all permissions for user2
@@ -288,10 +288,10 @@ open this URL in a browser (http://localhost/zabbix)
 ### Commands and Explanation:
 
 ```bash
-# Open port 443 (HTTPS) permanently
+# Open port 443 HTTPS permanently
 firewall-cmd --zone=public --add-port=443/tcp --permanent
 
-# Open port 80 (HTTP) permanently
+# Open port 80 HTTP permanently
 firewall-cmd --zone=public --add-port=80/tcp --permanent
 
 # Reload firewall to apply changes
