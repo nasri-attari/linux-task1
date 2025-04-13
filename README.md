@@ -79,9 +79,16 @@ echo "redhat" | passwd --stdin user2
 useradd user3
 echo "redhat" | passwd --stdin user3
 
+# Create a Admin group
+groupadd admin
+
 # Add both user2 and user3 to wheel group
-usermod -aG wheel user2
-usermod -aG wheel user3
+usermod -aG admin user2
+usermod -aG admin user3
+
+# Give user3 root permissions
+visudo
+Add --> user3 ALL=(ALL) ALL
 ```
 
 ---
@@ -391,11 +398,17 @@ CREATE DATABASE studentdb;
 CREATE USER 'studentuser'@'localhost' IDENTIFIED BY 'Student@123';
 
 -- Grant permissions to the new user
-GRANT ALL PRIVILEGES ON studentdb.* TO 'studentuser'@'localhost';
+GRANT ALL PRIVILEGES ON *.* TO 'studentuser'@'localhost' = PASSWORD('Student@123');
 FLUSH PRIVILEGES;
 
 -- Use the new database
 USE studentdb;
+
+# Login as the new user
+mysql -u studentuser -p
+
+USE studentdb;
+SELECT * FROM students;
 
 -- Create the students table
 CREATE TABLE students (
@@ -420,12 +433,6 @@ INSERT INTO students VALUES
 ('110-010', 'Mary', 'Chen', 'computer science', 2020);
 
 exit;
-
-# Login as the new user
-mysql -u studentuser -p
-
-USE studentdb;
-SELECT * FROM students;
 ```
 
 ---
