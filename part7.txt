@@ -1,5 +1,0 @@
-[zabbix-local]
-name=Zabbix Local Repository
-baseurl=http://localhost/zabbix
-enabled=1
-gpgcheck=0
